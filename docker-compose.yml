@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  auctiondb:
+    image: mongo
+
+  auctionviewdb:
+    image: mcr.microsoft.com/mssql/server:latest
+    
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
+  auction.api:
+    image: ${DOCKER_REGISTRY-}auctionapi
+    build:
+      context: .
+      dockerfile: Services/Auction.API/Dockerfile
+
+  auction.view.api:
+    image: ${DOCKER_REGISTRY-}auctionviewapi
+    build:
+      context: .
+      dockerfile: Services/Auction.View.API/Dockerfile
+
+volumes:
+  mongo_data:
+  sqlvolume:
