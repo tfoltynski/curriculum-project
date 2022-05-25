@@ -1,6 +1,5 @@
-using Auction.SharedKernel.Events;
-using Auction.View.API.EventBusConsumer;
-using MassTransit;
+using Auction.SharedKernel.Extensions;
+using Auction.SharedKernel.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace Auction.View.API
 {
@@ -39,9 +39,11 @@ namespace Auction.View.API
                 setup.SubstituteApiVersionInUrl = true;
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen(c =>
             {
+                c.CustomSchemaIds(type => SwaggerCustomSchema.GetSchemaId(type));
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = typeof(Startup).Assembly.GetName().Name, Version = "v1" });
             });
         }
@@ -67,6 +69,8 @@ namespace Auction.View.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseGlobalExceptionHandling();
 
             app.UseEndpoints(endpoints =>
             {

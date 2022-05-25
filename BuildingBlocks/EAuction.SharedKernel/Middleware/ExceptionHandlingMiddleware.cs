@@ -32,6 +32,11 @@ namespace Auction.SharedKernel.Middleware
                 logger.LogError(ex, ex.Message);
                 await HandleExceptionAsync(context, ex);
             }
+            catch (ValidationException ex)
+            {
+                logger.LogError(ex, ex.Message);
+                await HandleValidationExceptionAsync(context, ex);
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
@@ -51,6 +56,20 @@ namespace Auction.SharedKernel.Middleware
             };
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = exception.Status;
+            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+
+        private static async Task HandleValidationExceptionAsync(HttpContext httpContext, ValidationException exception)
+        {
+            var response = new
+            {
+                title = exception.Errors.FirstOrDefault().ErrorMessage,
+                status = StatusCodes.Status400BadRequest,
+                details = exception.Data,
+                errors = GetErrors(exception)
+            };
+            httpContext.Response.ContentType = "application/json";
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
 

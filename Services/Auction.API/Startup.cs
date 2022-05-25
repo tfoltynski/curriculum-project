@@ -15,11 +15,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization.Conventions;
+using System.Text.Json.Serialization;
 
 namespace Auction.API
 {
     public class Startup
     {
+        private string corsPolicy = "allowAllPolicy";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -56,11 +59,20 @@ namespace Auction.API
                 setup.SubstituteApiVersionInUrl = true;
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = typeof(Startup).Assembly.GetName().Name, Version = "v1" });
                 //c.SwaggerDoc("v2", new OpenApiInfo { Title = typeof(Startup).Assembly.GetName().Name, Version = "v2" });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(corsPolicy, policy =>
+                {
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                });
             });
 
             var conventionpack = new ConventionPack() { new IgnoreExtraElementsConvention(true) };
@@ -86,6 +98,8 @@ namespace Auction.API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(corsPolicy);
 
             app.UseAuthorization();
 

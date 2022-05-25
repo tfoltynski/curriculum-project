@@ -31,32 +31,30 @@ services:
     container_name: auction.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://+:80
       - "DatabaseSettings__ConnectionString=mongodb://auctiondb:27017"
       - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672"
     ports:
       - "8000:80"
-      - "9000:443"
     depends_on:
       - auctiondb
       - rabbitmq
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      #- ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   auction.view.api:
     container_name: auction.view.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://+:80
       - "ConnectionStrings__ConnectionString=Server=auctionviewdb;Database=ProductDb;User Id=sa;Password=Admin1234;"
       - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672"
     ports:
       - "8001:80"
-      - "9001:443"
     depends_on:
       - auctionviewdb
       - rabbitmq
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      #- ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

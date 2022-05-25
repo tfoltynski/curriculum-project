@@ -1,9 +1,12 @@
-﻿using Auction.View.API.Models;
+﻿using Auction.API.Features;
+using Auction.SharedKernel.Exceptions;
+using Auction.View.API.Models;
 using Auction.View.API.Models.Common;
 using Auction.View.API.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,16 +27,18 @@ namespace Auction.View.API.Controllers.v1
         }
 
         [HttpGet("show-product/{productId}")]
-        public async Task<ActionResult> ShowProduct([FromRoute] string productId)
+        public async Task<ActionResult<ShowProductDetailsResponse>> ShowProduct([FromRoute] string productId)
         {
             var product = await productRepository.GetByIdAsync(p => p.ProductId == productId, p => p.Include(p => p.SellerInformation).Include(p => p.Bids).ThenInclude(p => p.BuyerInformation));
+            if (product == null) throw new ResourceNotFoundException(ResourceNames.Product, productId);
+
             var response = mapper.Map<ShowProductDetailsResponse>(product);
             response.Bids = response.Bids.OrderByDescending(p => p.Amount).ToList();
             return Ok(response);
         }
 
         [HttpGet("show-products")]
-        public async Task<ActionResult> ShowProducts([FromQuery] PaginationInput pagination)
+        public async Task<ActionResult<ShowProductsResponse>> ShowProducts([FromQuery] PaginationInput pagination)
         {
             var product = await productRepository.GetAsync(orderBy: p => p.OrderByDescending(p => p.CreatedDate), include: p => p.Include(p => p.SellerInformation).Include(p => p.Bids).ThenInclude(p => p.BuyerInformation), pageNumber: pagination.PageNumber, pageSize: pagination.PageSize);
             var response = new ShowProductsResponse
