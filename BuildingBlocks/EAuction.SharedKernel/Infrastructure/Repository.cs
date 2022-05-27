@@ -1,5 +1,6 @@
 ﻿using Auction.SharedKernel.Aggregates;
 using Auction.SharedKernel.Events;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Auction.SharedKernel.Infrastructure
@@ -22,7 +23,7 @@ namespace Auction.SharedKernel.Infrastructure
         {
             var obj = new T();
             var events = await storage.GetEventsForAggregate(id);
-            if (events == null) return null;
+            if (!events.Any()) return null;
 
             obj.LoadsFromHistory(events);
             return obj;
