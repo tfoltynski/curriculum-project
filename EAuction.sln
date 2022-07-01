@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32407.343
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{B6F19B22-6ECA-4515-9DBF-ACF71E15B0E8}"
 EndProject
@@ -19,7 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{62A2C843
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction.API.Tests", "Tests\Auction.API.Tests\Auction.API.Tests.csproj", "{5936332C-567F-47B8-8C75-5C48FA2E85A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction.Test.Shared", "Tests\Auction.Test.Shared\Auction.Test.Shared.csproj", "{FEEAF4FF-EF3E-45CE-A295-2CC6B55A9275}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction.Test.Shared", "Tests\Auction.Test.Shared\Auction.Test.Shared.csproj", "{FEEAF4FF-EF3E-45CE-A295-2CC6B55A9275}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureFunctions", "AzureFunctions", "{9B549090-AA03-4E5C-8858-B9104B1F2419}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteProduct", "AzureFunctions\DeleteProduct\DeleteProduct.csproj", "{A90F628E-A664-4198-A052-5213841FA1B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,10 @@ Global
 		{FEEAF4FF-EF3E-45CE-A295-2CC6B55A9275}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEEAF4FF-EF3E-45CE-A295-2CC6B55A9275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEEAF4FF-EF3E-45CE-A295-2CC6B55A9275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A90F628E-A664-4198-A052-5213841FA1B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A90F628E-A664-4198-A052-5213841FA1B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A90F628E-A664-4198-A052-5213841FA1B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A90F628E-A664-4198-A052-5213841FA1B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +69,7 @@ Global
 		{A7BD9816-7E2B-44A7-8713-E581BC6A7C27} = {99C7406D-E44F-4494-8EDD-4386A9761968}
 		{5936332C-567F-47B8-8C75-5C48FA2E85A9} = {62A2C843-46AB-4E91-BBF2-75C0175E41DA}
 		{FEEAF4FF-EF3E-45CE-A295-2CC6B55A9275} = {62A2C843-46AB-4E91-BBF2-75C0175E41DA}
+		{A90F628E-A664-4198-A052-5213841FA1B5} = {9B549090-AA03-4E5C-8858-B9104B1F2419}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A7BF9F7B-325D-4215-986F-5B5D0F1143CD}

@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["Services/Auction.View.API/Auction.View.API.csproj", "Services/Auction.View.API/"]
+COPY ["BuildingBlocks/EAuction.SharedKernel/Auction.SharedKernel.csproj", "BuildingBlocks/EAuction.SharedKernel/"]
 RUN dotnet restore "Services/Auction.View.API/Auction.View.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Auction.View.API"

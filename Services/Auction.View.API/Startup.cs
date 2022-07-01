@@ -46,6 +46,16 @@ namespace Auction.View.API
                 c.CustomSchemaIds(type => SwaggerCustomSchema.GetSchemaId(type));
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = typeof(Startup).Assembly.GetName().Name, Version = "v1" });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                });
+            });
+
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +78,8 @@ namespace Auction.View.API
 
             app.UseRouting();
 
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.UseGlobalExceptionHandling();
@@ -75,6 +87,7 @@ namespace Auction.View.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("healthcheck");
             });
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Auction.API.Features.Product.Commands.PlaceBid;
 using Auction.API.Features.Product.Commands.UpdateBid;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Auction.API.Controllers.v1
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
+        [Authorize]
         [HttpPost("place-bid")]
         public async Task<ActionResult> AddProduct([FromBody] PlaceBidCommand command)
         {

@@ -6,6 +6,7 @@ using Auction.SharedKernel.Infrastructure;
 using FluentValidation;
 using MassTransit;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization.Conventions;
 using System.Text.Json.Serialization;
@@ -40,6 +42,10 @@ namespace Auction.API
             services.AddMassTransit(config =>
             {
                 config.UsingRabbitMq((context, cfg) => { cfg.Host(Configuration.GetValue<string>("EventBusSettings:HostAddress")); });
+                //config.UsingAzureServiceBus((context, cfg) =>
+                //{
+                //    cfg.Host(Configuration.GetValue<string>("EventBusSettings:HostAddress"));
+                //});
             });
 
             services.AddScoped<IAuctionContext, AuctionContext>();
@@ -75,6 +81,16 @@ namespace Auction.API
                 });
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(options =>
+                {
+                    Configuration.Bind("AzureAd", options);
+                    options.TokenValidationParameters.NameClaimType = "name";
+                }, options => { Configuration.Bind("AzureAd", options); });
+            services.AddAuthorization();
+
+            services.AddHealthChecks();
+
             var conventionpack = new ConventionPack() { new IgnoreExtraElementsConvention(true) };
             ConventionRegistry.Register("IgnoreExtraElements", conventionpack, type => true);
         }
@@ -97,10 +113,11 @@ namespace Auction.API
 
             //app.UseHttpsRedirection();
 
-            app.UseRouting();
-
             app.UseCors(corsPolicy);
 
+            app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseGlobalExceptionHandling();
@@ -108,6 +125,7 @@ namespace Auction.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("healthcheck");
             });
         }
     }

@@ -31,6 +31,7 @@ namespace Auction.View.API
             services.AddMassTransit(config =>
             {
                 config.AddConsumersFromNamespaceContaining<ProductCreatedConsumer>();
+                //config.UsingAzureServiceBus((context, cfg) =>
                 config.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(configuration.GetValue<string>("EventBusSettings:HostAddress"));
