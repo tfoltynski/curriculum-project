@@ -15,16 +15,16 @@ namespace Auction.API.Features.Product
         private readonly IPublishEndpoint publisher;
         private readonly IAuctionContext context;
 
-        public EventStore(IPublishEndpoint publisher, IAuctionContext productContext)
+        public EventStore(IPublishEndpoint publisher, IAuctionContext auctionContext)
         {
             this.publisher = publisher;
-            context = productContext;
+            context = auctionContext;
         }
 
         public async Task SaveEvents(string aggregateId, IEnumerable<Event> events, int expectedVersion)
         {
             var i = expectedVersion;
-
+            
             foreach (var @event in events)
             {
                 i++;

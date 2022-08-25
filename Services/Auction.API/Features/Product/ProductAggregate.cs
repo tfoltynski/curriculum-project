@@ -48,6 +48,7 @@ namespace Auction.API.Features.Product
                 ShortDescription = command.ShortDescription,
                 StartingPrice = command.StartingPrice,
                 State = command.SellerInformation.State,
+                WebSocketConnectionId = command.ConnectionId
             };
             ApplyChange(evnt);
         }

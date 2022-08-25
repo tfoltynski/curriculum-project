@@ -6,5 +6,6 @@ namespace Auction.SharedKernel.Events
     {
         public int Version { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public string WebSocketConnectionId { get; set; }
     }
 }

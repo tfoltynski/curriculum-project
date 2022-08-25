@@ -12,6 +12,7 @@ namespace Auction.API.Features.Product.Commands.CreateProduct
         public int StartingPrice { get; set; }
         public DateTime BidEndDate { get; set; }
         public SellerInformationDto SellerInformation { get; set; }
+        public string ConnectionId { get; set; }
 
         public sealed class SellerInformationDto
         {

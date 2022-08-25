@@ -1,4 +1,5 @@
 using Auction.API.Features.Product;
+using Auction.API.Hubs;
 using Auction.SharedKernel.Behaviours;
 using Auction.SharedKernel.Events;
 using Auction.SharedKernel.Extensions;
@@ -90,6 +91,7 @@ namespace Auction.API
             services.AddAuthorization();
 
             services.AddHealthChecks();
+            services.AddSignalR();
 
             var conventionpack = new ConventionPack() { new IgnoreExtraElementsConvention(true) };
             ConventionRegistry.Register("IgnoreExtraElements", conventionpack, type => true);
@@ -126,6 +128,7 @@ namespace Auction.API
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("healthcheck");
+                endpoints.MapHub<ProductHub>("/hubs/product");
             });
         }
     }

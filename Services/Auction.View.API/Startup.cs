@@ -1,5 +1,6 @@
 using Auction.SharedKernel.Extensions;
 using Auction.SharedKernel.Swagger;
+using Auction.View.API.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -51,11 +52,13 @@ namespace Auction.View.API
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(Configuration.GetSection("AllowOrigin").Get<string[]>()).AllowCredentials();
                 });
             });
 
             services.AddHealthChecks();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,7 +91,10 @@ namespace Auction.View.API
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("healthcheck");
+                endpoints.MapHub<ProductHub>("/hubs/product");
             });
+
+            
         }
     }
 }
